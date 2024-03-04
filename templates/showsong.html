@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Songs</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+  <header>
+    <h1>Songs: </h1>
+    
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/music">Songs hinzufügen</a></li>
+      
+    </ul>
+  </nav>
+
+{{songs}}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Music Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Music Players</title>
+</head>
+<body>
+    <h1>Player</h1>
+
+    <div id="musicPlayers">
+        {% for music_name in songs %}
+            <audio controls>
+                <source src="{{ url_for('static', filename= music_name) }}" type="audio/mp4">
+                Your browser does not support the audio element.
+            </audio>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+</body>
+</html>

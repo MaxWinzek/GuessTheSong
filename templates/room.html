@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% block content %}
+
+{% if admin %}
+<div class="message-box">
+    <h2>Chat Room: {{code}}</h2>
+    <div class="messages" id="messages"></div>
+    <div class="inputs">
+      <input
+        type="text"
+        rows="3"
+        placeholder="Message"
+        name="message"
+        id="message"
+      />
+      <button type="button" name="send" id="send-btn" onClick="sendPoints()">
+        givePoints
+      </button>
+      <button type="button" name="send" id="send-btn" onClick="newRound()">
+        newRound
+      </button>
+    </div>
+  </div>
+{% else %}
+<div class="message-box">
+    <h2>Room: {{code}}</h2>
+    <div class="messages" id="messages"></div>
+  
+      <button type="button" name="send" id="send-btn" onClick="sendBuzzer()">
+        Buzzer
+      </button>
+    </div>
+  </div>
+{% endif %}
+<script type="text/javascript">
+    var socketio = io();
+  
+    const messages = document.getElementById("messages");
+  
+    const createMessage = (name, msg) => {
+      const content = `
+      <div class="text">
+          <span>
+              <strong>${name}</strong>: ${msg}
+          </span>
+          <span class="muted">
+              ${new Date().toLocaleString()}
+          </span>
+      </div>
+      `;
+      messages.innerHTML += content;
+    };
+
+    socketio.on("message", (data) => {
+        createMessage(data.name, data.message);
+
+    });
+
+  const sendBuzzer = () => {
+    //const message = document.getElementById("message")
+    socketio.emit("message", {data: "hat den Buzzer gedrückt"})
+  };
+  const sendPoints = () => {
+    const message = document.getElementById("message")
+    if (message.value == "") return;
+    socketio.emit("givePoints", {data: message.value})
+    message.value = "";
+  };
+  const newRound = () => {
+    //const message = document.getElementById("message")
+    socketio.emit("message", {data: "neue Runde startet"})
+    socketio.emit("message", {data: " "})
+    socketio.emit("message", {data: " "})
+    socketio.emit("newRound")
+  };
+  
+
+</script>
+
+<body>
+    <div id="music-player-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var socket = io();
+
+        socket.on('newRound', function(music_url) {
+            displayMusicPlayer(music_url);
+        });
+
+        function displayMusicPlayer(music_url) {
+            // Clear previous player if exists
+            $('#music-player-container').empty();
+
+            // Create audio element
+            var audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = music_url;
+
+            // Append audio element to the container
+            $('#music-player-container').append(audio);
+        }
+    </script>
+</body>
+
+{% endblock %}
